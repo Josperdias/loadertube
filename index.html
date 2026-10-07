@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VideoBox — MP4 Player</title>
+<style>
+:root{
+  --bg:#0a0d14;
+  --panel:#121723;
+  --panel2:#171e2c;
+  --line:#283246;
+  --text:#f7f9fc;
+  --muted:#9aa6b7;
+  --accent:#5f8cff;
+  --accent2:#7b5cff;
+  --ok:#35c77d;
+  --warn:#ffb84d;
+  --danger:#ff6b6b;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(95,140,255,.18), transparent 32%),
+    radial-gradient(circle at 90% 0%, rgba(123,92,255,.12), transparent 28%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.app{
+  width:min(1100px,calc(100% - 24px));
+  margin:28px auto 48px;
+}
+header{margin-bottom:20px}
+.brand{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:8px;
+}
+.logo{
+  width:38px;height:38px;border-radius:12px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  font-weight:900;
+}
+h1{
+  margin:0;
+  font-size:clamp(28px,5vw,46px);
+  letter-spacing:-.045em;
+}
+.subtitle{color:var(--muted);margin:8px 0 0;max-width:760px}
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+@media(min-width:860px){
+  .grid{grid-template-columns:.9fr 1.1fr}
+}
+.card{
+  background:rgba(18,23,35,.92);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:18px;
+  box-shadow:0 18px 55px rgba(0,0,0,.22);
+}
+.card h2{
+  margin:0 0 15px;
+  font-size:18px;
+}
+label{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  margin:14px 0 7px;
+}
+input,select,button{font:inherit}
+input[type="url"],select{
+  width:100%;
+  padding:14px 15px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:var(--panel2);
+  color:var(--text);
+  outline:none;
+}
+input:focus,select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(95,140,255,.14);
+}
+.row{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+@media(min-width:540px){
+  .row{grid-template-columns:1fr 160px}
+}
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+button,.fileButton,a.buttonLink{
+  min-height:46px;
+  border:none;
+  border-radius:14px;
+  padding:0 16px;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-weight:800;
+  text-decoration:none;
+}
+button.primary,a.buttonLink.primary{background:var(--accent);color:white}
+button.secondary,.fileButton{background:#252d3e;color:white}
+button.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+button:disabled{opacity:.48;cursor:not-allowed}
+.note{
+  margin-top:14px;
+  padding:12px 13px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+  background:rgba(255,255,255,.02);
+}
+.note strong{color:var(--text)}
+.status{
+  min-height:22px;
+  margin-top:12px;
+  color:var(--muted);
+  font-size:14px;
+}
+.playerWrap{
+  overflow:hidden;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:#000;
+  aspect-ratio:16/9;
+  display:grid;
+  place-items:center;
+}
+video,iframe{
+  width:100%;
+  height:100%;
+  border:0;
+  background:#000;
+}
+.empty{
+  color:var(--muted);
+  padding:20px;
+  text-align:center;
+}
+input[type="file"]{display:none}
+.tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+.tab{
+  min-height:40px;
+  padding:0 14px;
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--muted);
+}
+.tab.active{
+  background:var(--panel2);
+  color:var(--text);
+  border-color:#3a4762;
+}
+.meta{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:13px;
+}
+.badge{
+  display:inline-flex;
+  padding:5px 9px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:11px;
+  margin-bottom:8px;
+}
+footer{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:16px;
+  text-align:center;
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <div class="brand">
+      <div class="logo">▶</div>
+      <div>
+        <div class="badge">ARQUIVO ÚNICO • HTML</div>
+        <h1>VideoBox</h1>
+      </div>
+    </div>
+    <p class="subtitle">Visualize MP4, abra arquivos locais e reproduza URLs diretas. Também reconhece links do YouTube para pré-visualização.</p>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Entrada de vídeo</h2>
+
+      <label for="videoUrl">Cole uma URL</label>
+      <input id="videoUrl" type="url" placeholder="YouTube ou link direto .mp4">
+
+      <div class="row">
+        <div>
+          <label for="quality">Qualidade desejada</label>
+          <select id="quality">
+            <option>1080p</option>
+            <option selected>720p</option>
+            <option>480p</option>
+            <option>360p</option>
+          </select>
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button id="previewBtn" class="secondary" type="button">Visualizar</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="downloadBtn" class="primary" type="button">Baixar MP4</button>
+        <label class="fileButton" for="localFile">Abrir MP4 local</label>
+        <input id="localFile" type="file" accept="video/mp4,.mp4">
+      </div>
+
+      <div id="status" class="status" aria-live="polite"></div>
+
+      <div class="note">
+        <strong>Importante:</strong> este arquivo é 100% HTML/CSS/JS. Ele pode reproduzir e baixar uma URL direta de MP4. Para transformar um link normal do YouTube em MP4, é necessário um servidor ou API externa; o navegador sozinho não possui acesso ao fluxo de mídia necessário.
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="tabs">
+        <button class="tab active" id="playerTab" type="button">Player MP4</button>
+        <button class="tab" id="youtubeTab" type="button">YouTube</button>
+      </div>
+
+      <div class="playerWrap">
+        <video id="player" controls playsinline></video>
+        <iframe id="youtubeFrame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:none"></iframe>
+        <div id="emptyState" class="empty">Abra um MP4 local ou cole uma URL de vídeo.</div>
+      </div>
+
+      <div class="actions">
+        <button id="playBtn" class="ghost" type="button">Play/Pause</button>
+        <button id="backBtn" class="ghost" type="button">−10s</button>
+        <button id="forwardBtn" class="ghost" type="button">+10s</button>
+        <button id="clearBtn" class="ghost" type="button">Limpar</button>
+      </div>
+
+      <div id="meta" class="meta">Nenhum vídeo carregado.</div>
+    </section>
+  </div>
+
+  <footer>Use downloads somente quando você possuir autorização para baixar o conteúdo.</footer>
+</main>
+
+<script>
+(() => {
+  const videoUrl = document.getElementById('videoUrl');
+  const previewBtn = document.getElementById('previewBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const localFile = document.getElementById('localFile');
+  const status = document.getElementById('status');
+
+  const player = document.getElementById('player');
+  const youtubeFrame = document.getElementById('youtubeFrame');
+  const emptyState = document.getElementById('emptyState');
+  const meta = document.getElementById('meta');
+
+  const playerTab = document.getElementById('playerTab');
+  const youtubeTab = document.getElementById('youtubeTab');
+  const playBtn = document.getElementById('playBtn');
+  const backBtn = document.getElementById('backBtn');
+  const forwardBtn = document.getElementById('forwardBtn');
+  const clearBtn = document.getElementById('clearBtn');
+
+  let objectUrl = null;
+  let mode = 'player';
+
+  function setStatus(text, type='normal'){
+    status.textContent = text;
+    status.style.color =
+      type === 'ok' ? 'var(--ok)' :
+      type === 'warn' ? 'var(--warn)' :
+      type === 'error' ? 'var(--danger)' :
+      'var(--muted)';
+  }
+
+  function parseUrl(value){
+    try { return new URL(value); } catch { return null; }
+  }
+
+  function getYoutubeId(value){
+    const url = parseUrl(value);
+    if(!url) return null;
+
+    const host = url.hostname.replace(/^www\./,'');
+    if(host === 'youtu.be'){
+      return url.pathname.split('/').filter(Boolean)[0] || null;
+    }
+
+    if(host === 'youtube.com' || host.endsWith('.youtube.com')){
+      if(url.pathname === '/watch') return url.searchParams.get('v');
+      const parts = url.pathname.split('/').filter(Boolean);
+      if(['shorts','embed','live'].includes(parts[0])) return parts[1] || null;
+    }
+    return null;
+  }
+
+  function isDirectMp4(value){
+    const url = parseUrl(value);
+    if(!url) return false;
+    return /\.mp4(?:$|[?#])/i.test(url.pathname + url.search + url.hash);
+  }
+
+  function switchMode(next){
+    mode = next;
+    const playerOn = next === 'player';
+
+    player.style.display = playerOn ? 'block' : 'none';
+    youtubeFrame.style.display = playerOn ? 'none' : 'block';
+
+    playerTab.classList.toggle('active', playerOn);
+    youtubeTab.classList.toggle('active', !playerOn);
+
+    emptyState.style.display = 'none';
+  }
+
+  function releaseObjectUrl(){
+    if(objectUrl){
+      URL.revokeObjectURL(objectUrl);
+      objectUrl = null;
+    }
+  }
+
+  function loadDirectMp4(url){
+    releaseObjectUrl();
+    youtubeFrame.src = '';
+    player.src = url;
+    player.load();
+    switchMode('player');
+    meta.textContent = 'MP4 remoto carregado.';
+    setStatus('MP4 aberto no visualizador.', 'ok');
+  }
+
+  function loadYouTube(id){
+    releaseObjectUrl();
+    player.pause();
+    player.removeAttribute('src');
+    player.load();
+
+    youtubeFrame.src = 'https://www.youtube.com/embed/' + encodeURIComponent(id);
+    switchMode('youtube');
+    meta.textContent = 'Pré-visualização do YouTube.';
+    setStatus('Link do YouTube reconhecido. A pré-visualização foi aberta.', 'ok');
+  }
+
+  previewBtn.addEventListener('click', () => {
+    const value = videoUrl.value.trim();
+    if(!value){
+      setStatus('Cole uma URL primeiro.', 'error');
+      return;
+    }
+
+    const ytId = getYoutubeId(value);
+    if(ytId){
+      loadYouTube(ytId);
+      return;
+    }
+
+    if(isDirectMp4(value)){
+      loadDirectMp4(value);
+      return;
+    }
+
+    setStatus('A URL não parece ser YouTube nem um link direto .mp4.', 'warn');
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    const value = videoUrl.value.trim();
+
+    if(!value){
+      setStatus('Cole uma URL primeiro.', 'error');
+      return;
+    }
+
+    const ytId = getYoutubeId(value);
+    if(ytId){
+      setStatus('Um HTML puro não consegue extrair/converter esse vídeo do YouTube para MP4. Para isso seria necessária uma API ou servidor.', 'warn');
+      return;
+    }
+
+    if(!isDirectMp4(value)){
+      setStatus('Para download direto neste HTML, a URL precisa apontar para um arquivo .mp4.', 'warn');
+      return;
+    }
+
+    const a = document.createElement('a');
+    a.href = value;
+    a.download = 'video.mp4';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setStatus('Download solicitado ao navegador.', 'ok');
+  });
+
+  localFile.addEventListener('change', () => {
+    const file = localFile.files && localFile.files[0];
+    if(!file) return;
+
+    if(file.type && file.type !== 'video/mp4' && !file.name.toLowerCase().endsWith('.mp4')){
+      setStatus('Selecione um arquivo MP4.', 'error');
+      return;
+    }
+
+    releaseObjectUrl();
+    objectUrl = URL.createObjectURL(file);
+
+    youtubeFrame.src = '';
+    player.src = objectUrl;
+    player.load();
+    switchMode('player');
+
+    const mb = (file.size / (1024 * 1024)).toFixed(1);
+    meta.textContent = file.name + ' • ' + mb + ' MB';
+    setStatus('Arquivo local carregado.', 'ok');
+  });
+
+  playerTab.addEventListener('click', () => switchMode('player'));
+  youtubeTab.addEventListener('click', () => {
+    if(youtubeFrame.src){
+      switchMode('youtube');
+    }else{
+      setStatus('Nenhum vídeo do YouTube foi carregado ainda.', 'warn');
+    }
+  });
+
+  playBtn.addEventListener('click', () => {
+    if(mode !== 'player' || !player.src){
+      setStatus('Abra um MP4 para usar os controles.', 'warn');
+      return;
+    }
+    if(player.paused) player.play().catch(()=>{});
+    else player.pause();
+  });
+
+  backBtn.addEventListener('click', () => {
+    if(mode === 'player' && Number.isFinite(player.duration)){
+      player.currentTime = Math.max(0, player.currentTime - 10);
+    }
+  });
+
+  forwardBtn.addEventListener('click', () => {
+    if(mode === 'player' && Number.isFinite(player.duration)){
+      player.currentTime = Math.min(player.duration, player.currentTime + 10);
+    }
+  });
+
+  clearBtn.addEventListener('click', () => {
+    player.pause();
+    player.removeAttribute('src');
+    player.load();
+    youtubeFrame.src = '';
+    releaseObjectUrl();
+    localFile.value = '';
+    videoUrl.value = '';
+    player.style.display = 'none';
+    youtubeFrame.style.display = 'none';
+    emptyState.style.display = 'block';
+    playerTab.classList.add('active');
+    youtubeTab.classList.remove('active');
+    mode = 'player';
+    meta.textContent = 'Nenhum vídeo carregado.';
+    setStatus('');
+  });
+
+  player.style.display = 'none';
+})();
+</script>
+</body>
+</html>
