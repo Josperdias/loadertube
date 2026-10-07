@@ -435,33 +435,77 @@ footer{
     setStatus('A URL não parece ser YouTube nem um link direto .mp4.', 'warn');
   });
 
-  downloadBtn.addEventListener('click', () => {
+  function saveBlob(blob, name){
+    const u = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = u; a.download = name; a.rel = 'noopener';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(u), 60000);
+  }
+
+  function fileNameFrom(value){
+    const url = parseUrl(value);
+    const last = url ? decodeURIComponent(url.pathname.split('/').filter(Boolean).pop() || '') : '';
+    return /\.mp4$/i.test(last) ? last : 'video.mp4';
+  }
+
+  downloadBtn.addEventListener('click', async () => {
     const value = videoUrl.value.trim();
 
     if(!value){
-      setStatus('Cole uma URL primeiro.', 'error');
+      const file = localFile.files && localFile.files[0];
+      if(file){
+        saveBlob(file, file.name);
+        setStatus('Arquivo salvo: ' + file.name, 'ok');
+      }else{
+        setStatus('Cole uma URL primeiro (ou abra um MP4 local).', 'error');
+      }
       return;
     }
 
     const ytId = getYoutubeId(value);
     if(ytId){
-      setStatus('Um HTML puro não consegue extrair/converter esse vídeo do YouTube para MP4. Para isso seria necessária uma API ou servidor.', 'warn');
+      setStatus('Links do YouTube só podem ser assistidos aqui. Para baixar, use o YouTube Studio (seus vídeos) ou o YouTube Premium.', 'warn');
       return;
     }
 
     if(!isDirectMp4(value)){
-      setStatus('Para download direto neste HTML, a URL precisa apontar para um arquivo .mp4.', 'warn');
+      setStatus('Para baixar, a URL precisa apontar direto para um arquivo .mp4.', 'warn');
       return;
     }
 
-    const a = document.createElement('a');
-    a.href = value;
-    a.download = 'video.mp4';
-    a.rel = 'noopener';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setStatus('Download solicitado ao navegador.', 'ok');
+    const name = fileNameFrom(value);
+    downloadBtn.disabled = true;
+    setStatus('Baixando...');
+    try{
+      const res = await fetch(value, {mode:'cors'});
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const total = Number(res.headers.get('content-length')) || 0;
+      const reader = res.body && res.body.getReader ? res.body.getReader() : null;
+      let blob;
+      if(reader){
+        const chunks = []; let got = 0;
+        for(;;){
+          const {done, value:chunk} = await reader.read();
+          if(done) break;
+          chunks.push(chunk); got += chunk.length;
+          setStatus(total ? 'Baixando... ' + Math.round(got/total*100) + '%' : 'Baixando... ' + (got/1048576).toFixed(1) + ' MB');
+        }
+        blob = new Blob(chunks, {type:'video/mp4'});
+      }else{
+        blob = await res.blob();
+      }
+      saveBlob(blob, name);
+      setStatus('Download concluído: ' + name, 'ok');
+    }catch(err){
+      // O servidor do vídeo não permite download direto pelo navegador (CORS): abre o arquivo em nova aba.
+      const a = document.createElement('a');
+      a.href = value; a.download = name; a.target = '_blank'; a.rel = 'noopener';
+      document.body.appendChild(a); a.click(); a.remove();
+      setStatus('Esse servidor bloqueia o download direto. Abri o vídeo em outra aba: use o menu ⋮ do player → Baixar, ou pressione e segure o vídeo.', 'warn');
+    }finally{
+      downloadBtn.disabled = false;
+    }
   });
 
   localFile.addEventListener('change', () => {
