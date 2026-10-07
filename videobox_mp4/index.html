@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="app-build" content="5">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <title>VideoBox — MP4 Player</title>
 <style>
 :root{
@@ -607,6 +609,24 @@ footer{
     if(/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) return;
     if(e.key === 'f' || e.key === 'F') fullBtn.click();
   });
+
+  // Atualização automática: se o servidor tiver uma versão mais nova, recarrega sozinho.
+  (function autoUpdate(){
+    if(!/^https?:$/.test(location.protocol)) return;
+    const mine = (document.querySelector('meta[name="app-build"]') || {}).content;
+    fetch(location.pathname + '?check=' + Date.now(), {cache:'no-store'})
+      .then(r => r.ok ? r.text() : '')
+      .then(html => {
+        const m = html.match(/name="app-build" content="([^"]+)"/);
+        if(!m || m[1] === mine) return;
+        let tries = 0;
+        try{ tries = Number(sessionStorage.getItem('vb-reload')) || 0; }catch(e){}
+        if(tries >= 2) return;
+        try{ sessionStorage.setItem('vb-reload', String(tries + 1)); }catch(e){}
+        location.replace(location.pathname + '?v=' + m[1]);
+      })
+      .catch(() => {});
+  })();
 
   player.style.display = 'none';
 })();
