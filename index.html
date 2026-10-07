@@ -268,6 +268,19 @@ footer{
         <button id="clearBtn" class="ghost" type="button">Limpar</button>
       </div>
 
+      <div class="actions">
+        <label for="speed" style="margin:0;align-self:center">Velocidade</label>
+        <select id="speed" style="width:auto">
+          <option value="0.5">0.5x</option>
+          <option value="0.75">0.75x</option>
+          <option value="1" selected>1x</option>
+          <option value="1.25">1.25x</option>
+          <option value="1.5">1.5x</option>
+          <option value="2">2x</option>
+        </select>
+        <button id="fullBtn" class="ghost" type="button">Tela cheia</button>
+      </div>
+
       <div id="meta" class="meta">Nenhum vídeo carregado.</div>
     </section>
   </div>
@@ -294,6 +307,10 @@ footer{
   const backBtn = document.getElementById('backBtn');
   const forwardBtn = document.getElementById('forwardBtn');
   const clearBtn = document.getElementById('clearBtn');
+
+  const speed = document.getElementById('speed');
+  const fullBtn = document.getElementById('fullBtn');
+  const playerWrap = document.querySelector('.playerWrap');
 
   let objectUrl = null;
   let mode = 'player';
@@ -494,6 +511,30 @@ footer{
     mode = 'player';
     meta.textContent = 'Nenhum vídeo carregado.';
     setStatus('');
+  });
+
+  function applySpeed(){ player.playbackRate = parseFloat(speed.value) || 1; }
+  speed.addEventListener('change', applySpeed);
+  player.addEventListener('loadedmetadata', applySpeed);
+
+  fullBtn.addEventListener('click', () => {
+    if(document.fullscreenElement || document.webkitFullscreenElement){
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      return;
+    }
+    const el = mode === 'player' ? player : youtubeFrame;
+    if(mode === 'player' && !player.src){
+      setStatus('Abra um vídeo para usar a tela cheia.', 'warn');
+      return;
+    }
+    const req = el.requestFullscreen || el.webkitRequestFullscreen || el.webkitEnterFullscreen;
+    if(req){ try{ const r = req.call(el); if(r && r.catch) r.catch(()=>setStatus('Não foi possível entrar em tela cheia.', 'warn')); }catch(e){ setStatus('Não foi possível entrar em tela cheia.', 'warn'); } }
+    else setStatus('Tela cheia não suportada neste navegador.', 'warn');
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) return;
+    if(e.key === 'f' || e.key === 'F') fullBtn.click();
   });
 
   player.style.display = 'none';
