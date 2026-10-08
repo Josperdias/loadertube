@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual do SEI! 4.0</title>
+<style>
+:root{--bg:#fff;--fg:#1d2430;--mut:#5b6573;--ac:#0b5cab;--box:#eef4fb;--tip:#e9f7ef;--warn:#fff4e0;--bd:#d5dde8}
+@media (prefers-color-scheme:dark){:root{--bg:#10151c;--fg:#e6ebf2;--mut:#9aa6b6;--ac:#6db3ff;--box:#18222f;--tip:#14281d;--warn:#2e2412;--bd:#2c3848}}
+@media print{:root{--bg:#fff;--fg:#000;--mut:#444;--ac:#0b5cab;--box:#eef4fb;--tip:#e9f7ef;--warn:#fff4e0;--bd:#ccc}
+ nav.toc a::after{content:""} h2{page-break-before:always} h2:first-of-type{page-break-before:avoid} .cover{page-break-after:always}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:820px;margin:0 auto;padding:0 16px 60px}
+.cover{padding:48px 0 24px;border-bottom:3px solid var(--ac)}
+.cover h1{font-size:2rem;margin:0 0 8px;color:var(--ac)}
+.cover p{color:var(--mut);margin:4px 0}
+h2{font-size:1.4rem;color:var(--ac);margin-top:2.2em;border-bottom:1px solid var(--bd);padding-bottom:6px}
+h3{font-size:1.1rem;margin-top:1.6em}
+nav.toc{background:var(--box);border:1px solid var(--bd);border-radius:8px;padding:12px 18px;margin:20px 0}
+nav.toc ol{margin:6px 0;padding-left:22px} nav.toc a{color:var(--ac);text-decoration:none}
+.tip,.warn,.prat{border-radius:8px;padding:10px 14px;margin:14px 0;border-left:4px solid}
+.tip{background:var(--tip);border-color:#2a9d5c}.warn{background:var(--warn);border-color:#e09a1a}.prat{background:var(--box);border-color:var(--ac)}
+.tip b:first-child,.warn b:first-child,.prat b:first-child{display:block;margin-bottom:2px}
+table{border-collapse:collapse;width:100%;font-size:.93rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:6px 9px;text-align:left;vertical-align:top} th{background:var(--box)}
+code,kbd{background:var(--box);border:1px solid var(--bd);border-radius:4px;padding:0 5px;font-size:.9em}
+li{margin:3px 0}
+.chk li{list-style:none;margin-left:-20px}.chk li::before{content:"☐ "}
+</style>
+</head>
+<body><main>
+
+<header class="cover">
+<h1>Manual do SEI! 4.0</h1>
+<p>Sistema Eletrônico de Informações — guia de estudo e prática</p>
+<p><b>Versão base.</b> Montada a partir do conhecimento geral do SEI. Nomes de menus e botões podem variar um pouco conforme o órgão e a versão instalada. Confira com o material do seu curso e com o ambiente de treinamento.</p>
+</header>
+
+<nav class="toc"><b>Sumário</b>
+<ol>
+<li><a href="#s1">O que é o SEI e como pensar nele</a></li>
+<li><a href="#s2">Acesso e tela inicial</a></li>
+<li><a href="#s3">Controle de processos</a></li>
+<li><a href="#s4">Iniciar um processo</a></li>
+<li><a href="#s5">Criar documentos</a></li>
+<li><a href="#s6">Assinar documentos</a></li>
+<li><a href="#s7">Tramitar (enviar) processos</a></li>
+<li><a href="#s8">Organização: marcadores, atribuição, acompanhamento especial</a></li>
+<li><a href="#s9">Blocos</a></li>
+<li><a href="#s10">Relacionar, anexar, sobrestar, concluir, reabrir</a></li>
+<li><a href="#s11">Pesquisa e Base de Conhecimento</a></li>
+<li><a href="#s12">Acesso externo e usuário externo</a></li>
+<li><a href="#s13">Roteiro de prática no ambiente de treinamento</a></li>
+<li><a href="#s14">Glossário e dúvidas frequentes</a></li>
+</ol></nav>
+
+<h2 id="s1">1. O que é o SEI e como pensar nele</h2>
+<p>O SEI é um sistema de gestão de processos e documentos eletrônicos. Ele substitui o papel: tudo o que antes era um processo físico vira um <b>processo eletrônico</b>, com documentos, assinaturas e histórico.</p>
+<h3>Conceitos-chave</h3>
+<table>
+<tr><th>Termo</th><th>Significado</th></tr>
+<tr><td>Processo</td><td>Conjunto de documentos reunidos sobre um mesmo assunto. Recebe um número (NUP) automático.</td></tr>
+<tr><td>Documento</td><td>Peça dentro do processo: interno (criado no editor do SEI) ou externo (arquivo anexado).</td></tr>
+<tr><td>Unidade</td><td>Setor onde você está atuando. Um usuário pode ter acesso a várias unidades.</td></tr>
+<tr><td>Tramitar</td><td>Enviar o processo a outra unidade.</td></tr>
+<tr><td>Nível de acesso</td><td>Público, Restrito ou Sigiloso. Define quem pode ver o processo ou documento.</td></tr>
+<tr><td>Tipo de processo</td><td>Classificação do assunto, por exemplo "Administração Geral: Pessoal".</td></tr>
+<tr><td>Hipótese legal</td><td>Justificativa legal exigida quando o nível de acesso é Restrito.</td></tr>
+</table>
+<div class="tip"><b>Dica</b>Pense em duas camadas: o <b>processo</b> é a pasta, e os <b>documentos</b> são as folhas dentro dela. Quase toda ação no SEI acontece sobre um desses dois.</div>
+
+<h2 id="s2">2. Acesso e tela inicial</h2>
+<ol>
+<li>Abra o endereço do SEI do seu órgão.</li>
+<li>Informe usuário e senha.</li>
+<li>Escolha o <b>órgão</b>, se houver mais de um.</li>
+<li>Clique em <b>Acessar</b>.</li>
+</ol>
+<h3>Partes da tela</h3>
+<ul>
+<li><b>Barra superior:</b> logo, caixa de pesquisa rápida, seletor de <b>unidade</b>, ícones de alertas e menu do usuário.</li>
+<li><b>Menu à esquerda:</b> Controle de Processos, Iniciar Processo, Retorno Programado, Pesquisa, Base de Conhecimento, Textos Padrão, Modelos Favoritos, Blocos, Marcadores, entre outros.</li>
+<li><b>Área central:</b> lista de processos da unidade.</li>
+</ul>
+<div class="warn"><b>Atenção</b>Confira sempre a unidade selecionada no topo antes de agir. Trocar de unidade muda o que você enxerga e o que pode fazer.</div>
+<div class="prat"><b>Prática</b>Entre no ambiente de treinamento, troque de unidade, localize cada item do menu e abra a pesquisa rápida.</div>
+
+<h2 id="s3">3. Controle de processos</h2>
+<p>É a tela central. Lista os processos <b>recebidos</b> e <b>gerados</b> na sua unidade.</p>
+<ul>
+<li><b>Ver por:</b> alterna entre visualização por processos ou por tipo.</li>
+<li><b>Ícones ao lado do número:</b> processo novo (em vermelho/negrito), atribuído a alguém, com marcador, anotação, documento para assinatura, sobrestado e outros. Passe o mouse sobre o ícone para ver a descrição.</li>
+<li><b>Processo em negrito vermelho:</b> ainda não foi aberto por ninguém na unidade.</li>
+</ul>
+
+<h2 id="s4">4. Iniciar um processo</h2>
+<ol>
+<li>Menu <b>Iniciar Processo</b>.</li>
+<li>Escolha o <b>tipo do processo</b> (use a lupa ou digite parte do nome).</li>
+<li>Preencha <b>Especificação</b> (descrição curta do assunto).</li>
+<li>Se pedido, informe <b>Interessados</b>.</li>
+<li>Escolha o <b>Nível de Acesso</b>. Se for Restrito, selecione a <b>Hipótese Legal</b>.</li>
+<li>Clique em <b>Salvar</b>. O número do processo é gerado.</li>
+</ol>
+<div class="warn"><b>Atenção</b>Use Restrito somente com base legal. O padrão da administração é a publicidade.</div>
+
+<h2 id="s5">5. Criar documentos</h2>
+<h3>5.1 Documento interno (gerado)</h3>
+<ol>
+<li>Abra o processo e clique em <b>Incluir Documento</b>.</li>
+<li>Escolha o <b>tipo</b> (Ofício, Memorando, Despacho, Nota Técnica, etc.).</li>
+<li>Defina texto inicial: nenhum, documento modelo ou texto padrão.</li>
+<li>Preencha descrição, interessados, destinatários e nível de acesso.</li>
+<li>Clique em <b>Salvar</b>. O editor abre.</li>
+<li>Redija e clique em <b>Salvar</b> no editor.</li>
+</ol>
+<h3>5.2 Documento externo</h3>
+<ol>
+<li>Clique em <b>Incluir Documento</b> e escolha <b>Externo</b>.</li>
+<li>Informe tipo, data do documento, formato (nato-digital ou digitalizado) e nível de acesso.</li>
+<li>Selecione o arquivo e clique em <b>Salvar</b>.</li>
+</ol>
+<div class="tip"><b>Dica</b>Para documento digitalizado, informe o tipo de conferência (cópia autenticada, cópia simples, etc.) conforme as regras do seu órgão.</div>
+<h3>5.3 Outras ações sobre documentos</h3>
+<table>
+<tr><th>Ação</th><th>Para que serve</th></tr>
+<tr><td>Editar conteúdo</td><td>Alterar o texto enquanto <b>não assinado</b>.</td></tr>
+<tr><td>Consultar/Alterar</td><td>Mudar metadados (descrição, nível de acesso).</td></tr>
+<tr><td>Excluir</td><td>Só enquanto o documento não foi assinado nem movimentado.</td></tr>
+<tr><td>Cancelar</td><td>Torna o documento sem efeito mantendo o registro, após assinado.</td></tr>
+<tr><td>Duplicar</td><td>Cria cópia como ponto de partida.</td></tr>
+<tr><td>Gerar PDF/ZIP</td><td>Baixar o processo ou documentos selecionados.</td></tr>
+</table>
+
+<h2 id="s6">6. Assinar documentos</h2>
+<ol>
+<li>Abra o documento e clique no ícone <b>Assinar Documento</b> (caneta).</li>
+<li>Confira o <b>cargo/função</b> exibido.</li>
+<li>Informe sua <b>senha</b> (ou use certificado digital, se o órgão adotar).</li>
+<li>Clique em <b>Assinar</b>.</li>
+</ol>
+<p>Depois de assinado, o documento <b>não pode mais ser editado</b>. Se precisar corrigir, cancele e gere outro.</p>
+<div class="tip"><b>Dica</b>Para pedir assinatura de outras pessoas, use o <b>Bloco de Assinatura</b> (seção 9) ou a ação <b>Disponibilizar para Assinatura</b>.</div>
+
+<h2 id="s7">7. Tramitar (enviar) processos</h2>
+<ol>
+<li>Abra o processo e clique em <b>Enviar Processo</b>.</li>
+<li>Em <b>Unidades</b>, digite a sigla ou o nome e selecione.</li>
+<li>Opções úteis: <b>manter o processo aberto na unidade atual</b>, <b>remover anotação</b>, <b>enviar e-mail de notificação</b>, <b>prazo para retorno</b>.</li>
+<li>Clique em <b>Enviar</b>.</li>
+</ol>
+<div class="warn"><b>Atenção</b>Antes de enviar, confira se todos os documentos necessários estão assinados e se o nível de acesso está correto.</div>
+<div class="prat"><b>Prática</b>Crie um processo, inclua um despacho, assine e envie para outra unidade de treinamento. Depois, troque de unidade e confira o recebimento.</div>
+
+<h2 id="s8">8. Organização: marcadores, atribuição, acompanhamento especial</h2>
+<h3>Atribuir</h3>
+<p>Dentro do processo, ícone <b>Atribuir Processo</b>: escolha o usuário da unidade responsável. Aparece uma etiqueta com o nome na lista.</p>
+<h3>Marcadores</h3>
+<p>Etiquetas coloridas para classificar processos da unidade (por exemplo "Urgente", "Aguardando resposta"). Cadastre em <b>Marcadores</b> no menu, ou use <b>Gerenciar Marcador</b> no processo.</p>
+<h3>Anotações</h3>
+<p>Notas visíveis apenas na sua unidade. Há opção de marcar como prioridade.</p>
+<h3>Acompanhamento especial</h3>
+<p>Permite acompanhar um processo mesmo depois que ele sair da sua unidade, agrupando por grupos de acompanhamento.</p>
+<h3>Retorno programado</h3>
+<p>Ao enviar, defina um prazo. Se não houver retorno até lá, a unidade de origem é avisada.</p>
+
+<h2 id="s9">9. Blocos</h2>
+<table>
+<tr><th>Bloco</th><th>Uso</th></tr>
+<tr><td>De assinatura</td><td>Reunir documentos para um ou mais usuários assinarem de uma vez.</td></tr>
+<tr><td>De reunião</td><td>Reunir processos para discutir em reunião.</td></tr>
+<tr><td>Interno</td><td>Agrupar processos para organização da própria unidade.</td></tr>
+</table>
+<h3>Bloco de assinatura: passo a passo</h3>
+<ol>
+<li>Menu <b>Blocos → Assinatura → Novo</b>, e dê uma descrição.</li>
+<li>No documento, clique em <b>Incluir em Bloco de Assinatura</b>.</li>
+<li>Disponibilize o bloco para a unidade de quem vai assinar.</li>
+<li>O signatário abre o bloco, marca os documentos e clica em <b>Assinar</b>.</li>
+</ol>
+
+<h2 id="s10">10. Relacionar, anexar, sobrestar, concluir, reabrir</h2>
+<table>
+<tr><th>Ação</th><th>O que faz</th></tr>
+<tr><td>Relacionar</td><td>Liga dois processos sem juntá-los. Só referência.</td></tr>
+<tr><td>Anexar</td><td>Junta um processo a outro, que vira o principal. O anexado deixa de receber documentos.</td></tr>
+<tr><td>Sobrestar</td><td>Suspende o andamento por motivo justificado.</td></tr>
+<tr><td>Concluir</td><td>Encerra o processo na sua unidade. Ele pode ser reaberto.</td></tr>
+<tr><td>Reabrir</td><td>Retoma um processo concluído na unidade.</td></tr>
+<tr><td>Ciência</td><td>Registra que você tomou conhecimento de um documento.</td></tr>
+</table>
+<div class="warn"><b>Atenção</b>Concluir o processo na unidade não o apaga: só o retira da sua lista de trabalho aberta.</div>
+
+<h2 id="s11">11. Pesquisa e Base de Conhecimento</h2>
+<h3>Pesquisa</h3>
+<ul>
+<li><b>Pesquisa rápida</b> (topo): por número do processo ou documento.</li>
+<li><b>Pesquisa avançada</b> (menu): por texto, tipo, interessado, período, unidade geradora e outros filtros.</li>
+</ul>
+<h3>Base de Conhecimento</h3>
+<p>Repositório de procedimentos e orientações internas do órgão, que podem ser consultados e liberados a outras unidades.</p>
+<h3>Textos padrão e modelos favoritos</h3>
+<p>Textos padrão são trechos reutilizáveis para o editor. Modelos favoritos guardam documentos de partida que você usa com frequência.</p>
+
+<h2 id="s12">12. Acesso externo e usuário externo</h2>
+<ul>
+<li><b>Usuário externo:</b> pessoa de fora do órgão com cadastro no SEI. Pode peticionar e assinar documentos disponibilizados.</li>
+<li><b>Acesso externo:</b> liberação de visualização de um processo ou documento para alguém de fora. Pode ser para o processo todo ou para um documento específico, com prazo de validade.</li>
+<li><b>Peticionamento:</b> envio de documentos de fora para dentro do processo, quando o órgão habilita esse módulo.</li>
+</ul>
+<div class="tip"><b>Dica</b>Ao liberar acesso externo, defina um prazo curto e revise depois. Acesso aberto sem prazo é risco.</div>
+
+<h2 id="s13">13. Roteiro de prática no ambiente de treinamento</h2>
+<p>Faça na ordem e marque o que completar.</p>
+<ul class="chk">
+<li>Entrar, trocar de unidade e identificar cada item do menu.</li>
+<li>Iniciar um processo com nível de acesso Público.</li>
+<li>Iniciar um processo com nível Restrito e escolher hipótese legal.</li>
+<li>Incluir um Memorando (documento interno) e redigir um texto.</li>
+<li>Incluir um documento externo (um PDF qualquer).</li>
+<li>Assinar o memorando.</li>
+<li>Tentar editar o memorando assinado e observar o que acontece.</li>
+<li>Criar um bloco de assinatura e disponibilizar para outra unidade.</li>
+<li>Atribuir o processo a um colega e criar um marcador.</li>
+<li>Enviar o processo para outra unidade com prazo de retorno.</li>
+<li>Na outra unidade, receber, incluir despacho, assinar e devolver.</li>
+<li>Relacionar dois processos.</li>
+<li>Anexar um processo a outro.</li>
+<li>Sobrestar e depois remover o sobrestamento.</li>
+<li>Concluir e reabrir um processo.</li>
+<li>Usar a pesquisa avançada para encontrar o que criou.</li>
+<li>Liberar acesso externo a um documento com prazo.</li>
+</ul>
+
+<h2 id="s14">14. Glossário e dúvidas frequentes</h2>
+<table>
+<tr><th>Termo</th><th>Definição</th></tr>
+<tr><td>NUP</td><td>Número Único de Protocolo, o número do processo.</td></tr>
+<tr><td>Interessado</td><td>Pessoa ou entidade a quem o processo diz respeito.</td></tr>
+<tr><td>Despacho</td><td>Documento curto para encaminhar ou comentar o processo.</td></tr>
+<tr><td>Nato-digital</td><td>Documento que já nasceu em formato digital.</td></tr>
+<tr><td>Digitalizado</td><td>Documento em papel convertido em arquivo.</td></tr>
+</table>
+<h3>Perguntas rápidas</h3>
+<p><b>Assinei errado. E agora?</b> Cancele o documento (com justificativa) e gere um novo.</p>
+<p><b>Não acho o processo que enviei.</b> Ele saiu da sua unidade. Use a pesquisa, ou o acompanhamento especial se o tinha marcado.</p>
+<p><b>Não consigo enviar o processo.</b> Veja se há documento aguardando assinatura, se a unidade de destino existe e se está ativa.</p>
+<p><b>Não consigo excluir um documento.</b> Ele provavelmente já foi assinado. Use Cancelar.</p>
+
+<hr>
+<p style="color:var(--mut);font-size:.9rem">Material de estudo pessoal. Em caso de divergência com as normas do seu órgão ou com o conteúdo do curso, prevalecem estes últimos.</p>
+</main></body></html>
